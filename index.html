@@ -1229,6 +1229,7 @@ function printInvoice(orderId){
     document.getElementById('inv-day').innerText = o.day || '';
     document.getElementById('inv-customer').innerText = o.name;
     document.getElementById('inv-cust-phone').innerText = o.phone || '';
+    document.getElementById('inv-cust-addr').innerText = o.address;
     document.getElementById('inv-subtotal').innerText = 'PKR ' + Number(o.totalRevenue).toLocaleString();
     document.getElementById('inv-total').innerText = 'PKR ' + Number(o.totalRevenue).toLocaleString();
 

@@ -63,6 +63,7 @@ Developed by **Muneeb Ahmad** from Pakistan, this system leverages modern vanill
 The local state is cached in the browser's `localStorage` under the key `muneeb_pro_ultimate` to allow operations during offline network drops.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ```json
 {
   "orders": [
@@ -119,6 +120,8 @@ The local state is cached in the browser's `localStorage` under the key `muneeb_
 
 ---
 
+=======
+>>>>>>> bfec1e713b7e4d91892bcd2b3d44c8e384f5e830
 =======
 >>>>>>> bfec1e713b7e4d91892bcd2b3d44c8e384f5e830
 ## ⚡ Google Apps Script Core Codebase

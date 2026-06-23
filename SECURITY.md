@@ -20,7 +20,11 @@ We take the security of our Point of Sale system seriously. If you find a securi
 ### How to Report
 Please report security vulnerabilities by:
 <<<<<<< HEAD
+<<<<<<< HEAD
 * Sending a direct email to: **officialmuneebahmad@gmail.com** (or your preferred security contact email)
+=======
+* Sending a direct email to: **officialmuneebahmed@gmail.com** (or your preferred security contact email)
+>>>>>>> bfec1e713b7e4d91892bcd2b3d44c8e384f5e830
 =======
 * Sending a direct email to: **officialmuneebahmed@gmail.com** (or your preferred security contact email)
 >>>>>>> bfec1e713b7e4d91892bcd2b3d44c8e384f5e830

@@ -1,4 +1,4 @@
-# Muneeb Business POS Pro Ultimate
+# Business POS Pro Ultimate
 
 A professional, high-performance, offline-resilient Point of Sale (POS) system designed for retail operations. 
 

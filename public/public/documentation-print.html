@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muneeb Business POS Pro — Technical Documentation (Printable)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Georgia:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-serif: 'Georgia', Cambria, "Times New Roman", Times, serif;
+            --font-mono: 'Fira Code', Consolas, Monaco, monospace;
+            
+            --bg-canvas: #f3f4f6;
+            --bg-paper: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #555555;
+            --text-light: #777777;
+            --border-color: #d1d5db;
+            --border-dark: #1a1a1a;
+            --bg-code: #f9fafb;
+            
+            --page-width: 210mm;
+            --page-padding: 20mm;
+        }
+
+        /* Basic Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            font-size: 11pt;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--bg-canvas);
+            padding: 40px 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* Container designed to look like A4 paper sheets sequentially */
+        .document-container {
+            width: var(--page-width);
+            margin: 0 auto;
+            background: var(--bg-paper);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            padding: var(--page-padding);
+            position: relative;
+        }
+
+        /* Printable sections */
+        section {
+            margin-bottom: 2.5rem;
+            page-break-inside: avoid;
+        }
+
+        /* Headings */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            color: #000;
+            line-height: 1.25;
+            margin-top: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        h1 {
+            font-size: 24pt;
+            border-bottom: 2px solid var(--border-dark);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 16pt;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.4rem;
+        }
+
+        h3 {
+            font-size: 13pt;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+        }
+
+        strong {
+            font-weight: 700;
+            color: #000;
+        }
+
+        /* Navigation or Action Bar (Non-Printable) */
+        .no-print-bar {
+            width: var(--page-width);
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e293b;
+            color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .no-print-bar button {
+            background: #ffffff;
+            color: #1e293b;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .no-print-bar button:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+
+        /* Cover Page */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 250mm; /* A4 page height minus padding roughly */
+            page-break-after: always;
+            padding-top: 40mm;
+            padding-bottom: 20mm;
+        }
+
+        .cover-header {
+            border-bottom: 3px double var(--border-dark);
+            padding-bottom: 1.5rem;
+        }
+
+        .cover-title {
+            font-size: 32pt;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .cover-subtitle {
+            font-size: 14pt;
+            font-style: italic;
+            color: var(--text-muted);
+            font-family: var(--font-serif);
+        }
+
+        .cover-details {
+            margin-top: auto;
+            font-family: var(--font-sans);
+            font-size: 10pt;
+            line-height: 1.8;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+        }
+
+        .cover-details table {
+            width: 100%;
+            border: none;
+        }
+
+        .cover-details td {
+            padding: 4px 0;
+            border: none;
+        }
+
+        .cover-details td.label {
+            font-weight: 700;
+            width: 150px;
+            text-transform: uppercase;
+            font-size: 9pt;
+            color: var(--text-muted);
+        }
+
+        /* Table of Contents */
+        .toc-list {
+            list-style: none;
+            margin-bottom: 2rem;
+            font-family: var(--font-sans);
+        }
+
+        .toc-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 0.6rem;
+            font-size: 11pt;
+        }
+
+        .toc-item a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toc-dots {
+            flex-grow: 1;
+            border-bottom: 1px dotted var(--border-color);
+            margin: 0 10px;
+            position: relative;
+            top: -4px;
+        }
+
+        .toc-page {
+            font-weight: 700;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        li {
+            margin-bottom: 0.4rem;
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--bg-code);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin-bottom: 1.2rem;
+            page-break-inside: avoid;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            font-size: 8.5pt;
+            color: #000;
+        }
+
+        p code, li code {
+            background-color: var(--bg-code);
+            padding: 2px 5px;
+            border-radius: 3px;
+            border: 1px solid #e5e7eb;
+            font-size: 9.5pt;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-sans);
+            font-size: 9.5pt;
+            page-break-inside: avoid;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f3f4f6;
+            font-weight: 700;
+            color: #000;
+            border-bottom: 2px solid var(--border-dark);
+            text-transform: uppercase;
+            font-size: 8.5pt;
+            letter-spacing: 0.5px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        /* Blockquotes / Notes */
+        blockquote {
+            border-left: 3px solid var(--border-dark);
+            padding: 8px 16px;
+            margin-bottom: 1.2rem;
+            background-color: #f9fafb;
+            font-style: italic;
+        }
+
+        /* Architecture Diagram representation */
+        .diagram {
+            font-family: var(--font-mono);
+            font-size: 9pt;
+            background-color: #f9fafb;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            line-height: 1.4;
+            margin-bottom: 1.5rem;
+            white-space: pre;
+            page-break-inside: avoid;
+        }
+
+        /* Page Breaks */
+        .page-break {
+            page-break-after: always;
+        }
+
+        /* Printing Specific Rule Overrides */
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+
+            .document-container {
+                width: 100%;
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+
+            .no-print-bar {
+                display: none;
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                page-break-after: avoid;
+            }
+
+            pre, table, blockquote, tr {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Non-Printable Action Bar -->
+    <div class="no-print-bar">
+        <span>📄 Printable Technical Documentation (optimized for A4 PDF / Physical Print)</span>
+        <button onclick="window.print()">🖨️ Print Documentation</button>
+    </div>
+
+    <!-- Main Document Container -->
+    <div class="document-container">
+
+        <!-- Cover Page Section -->
+        <div class="cover-page">
+            <div class="cover-header">
+                <h1 class="cover-title">Muneeb Business<br>POS Pro Ultimate</h1>
+                <p class="cover-subtitle">Technical Architecture, Schema Design, and Deployment Guide</p>
+            </div>
+
+            <div class="cover-details">
+                <table>
+                    <tr>
+                        <td class="label">Developer</td>
+                        <td>Muneeb Ahmad</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Location</td>
+                        <td>Pakistan</td>
+                    </tr>
+                    <tr>
+                        <td class="label">System Version</td>
+                        <td>v2.1 (Multi-Product Cart Sync Release)</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Front-End</td>
+                        <td>HTML5, CSS3 (Vanilla), JavaScript (Vanilla ES6)</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Back-End</td>
+                        <td>Google Sheets (via Google Apps Script Web App Engine)</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Authentication</td>
+                        <td>Firebase Web SDK v10 (Authentication & Firestore Guard)</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Security Rule Date</td>
+                        <td>2026-06-23 (Active Protection Loop)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <section class="page-break">
+            <h2>Table of Contents</h2>
+            <ul class="toc-list" style="margin-left: 0; margin-top: 1.5rem;">
+                <li class="toc-item">
+                    <a href="#introduction">1. Introduction & Core Scope</a>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">1</span>
+                </li>
+                <li class="toc-item">
+                    <a href="#architecture">2. System Architecture & Data Flow</a>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">2</span>
+                </li>
+                <li class="toc-item">
+                    <a href="#frontend">3. Frontend Modules & User Interface</a>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">3</span>
+                </li>
+                <li class="toc-item">
+                    <a href="#database">4. Local Database & State Management</a>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">4</span>
+                </li>
+                <li class="toc-item">
+                    <a href="#backend">5. Backend Integration: Google Sheets Engine</a>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">5</span>
+                </li>
+                <li class="toc-item">
+                    <a href="#security">6. Security: Authentication & Developer Safeguards</a>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">7</span>
+                </li>
+                <li class="toc-item">
+                    <a href="#setup">7. Installation, Configurations & Troubleshooting</a>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page">8</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Section 1: Introduction -->
+        <section id="introduction">
+            <h1>1. Introduction & Core Scope</h1>
+            <p>
+                <strong>Muneeb Business POS Pro Ultimate</strong> is a high-performance, lightweight, offline-resilient Point of Sale (POS) system designed specifically for non-technical retail users. Built using pure vanilla web technologies (HTML, CSS, JS), it removes framework bloat to achieve near-instantaneous page load speeds, high UI responsiveness, and compatibility across low-spec hardware.
+            </p>
+            <p>
+                Traditional POS systems introduce high complexity with SQL/NoSQL servers, local hosting environments, and expensive subscriptions. This system leverages <strong>Google Sheets</strong> as its central cloud database database, allowing shop operators to manage products, adjust inventory settings, view customers, and analyze sales figures directly inside a simple spreadsheet. 
+            </p>
+            <h3>Core Project Design Objectives:</h3>
+            <ul>
+                <li><strong>No-Code Backend for Operators:</strong> System owners can view records, edit data errors, and audit transactions in Google Sheets without interacting with SQL managers or raw admin command terminals.</li>
+                <li><strong>High Offline Resilience:</strong> The system maintains state inside browser <code>localStorage</code>. Operators can continue creating carts, decrementing inventory, and browsing customer history even during intermittent network drops.</li>
+                <li><strong>Secured Workspace:</strong> Strict protection mechanisms guard the client interface from code extraction, inspector console modifications, and unauthorized client replication.</li>
+                <li><strong>Clean PDF Generation:</strong> Automated physical receipt printing and A4 invoice conversions occur client-side via asynchronous DOM-to-PDF rendering pipelines.</li>
+            </ul>
+        </section>
+
+        <!-- Section 2: System Architecture & Data Flow -->
+        <section id="architecture" class="page-break">
+            <h1>2. System Architecture & Data Flow</h1>
+            <p>
+                The application follows a <strong>Decentralized Client-to-Sheet (DCS) model</strong>. Instead of directly communicating with a standard SQL backend, the Vanilla JS frontend interfaces with two external services: <strong>Firebase Web Client SDK</strong> for session protection, and <strong>Google Apps Script</strong> acting as a REST API middleware mapping data calls to Google Sheets cells.
+            </p>
+            
+            <div class="diagram">
++--------------------------------------------------------------------------+
+|                       Vanilla JS Client (Browser)                        |
+|                                                                          |
+|  +------------------------+  +--------------------+  +----------------+  |
+|  |     State Manager      |  |  localStorage DB   |  |   protect.js   |  |
+|  |  (Products/Carts/UI)   |  | (Offline Database) |  | (Dev Defender) |  |
+|  +-----------+------------+  +---------+----------+  +----------------+  |
+|              |                         |                                 |
++--------------|-------------------------|---------------------------------+
+               |                         |
+       (Firebase Auth API)        (Ajax / POST Requests)
+               |                         |
+               v                         v
+       +---------------+       +--------------------+
+       | Firebase Auth |       | Google Apps Script |
+       |  (User Login) |       |  (doGet / doPost)  |
+       +---------------+       +---------+----------+
+                                         |
+                                (Read / Write Cells)
+                                         v
+                               +--------------------+
+                               | Google Sheets DB   |
+                               |  - Products/Stocks |
+                               |  - Orders/Customers|
+                               +--------------------+
+            </div>
+
+            <h3>Data Sync and Operation Lifecycles:</h3>
+            <ol>
+                <li>
+                    <strong>Authentication Flow:</strong> Upon page load, the Firebase observer monitors the login state. The dashboard elements remain hidden in the DOM, showing a simple centered login container. Only successful Firebase credential match calls display the POS application wrapper.
+                </li>
+                <li>
+                    <strong>Sync Fetch (GET Pipeline):</strong> When the operator triggers cloud synchronization, the client generates a GET request to the Google Apps Script Web App URL. The client appends a cache-busting timestamp param (<code>t=Date.now()</code>) to guarantee it bypasses intermediate CDN/browser cache proxies. The API returns a unified JSON containing product definitions, current stock tallies, orders history, and customer directories, which are then written into the local state.
+                </li>
+                <li>
+                    <strong>Transactions (POST Pipeline):</strong> Actions such as "Add Product", "Place Order", and "Update Stock" trigger asynchronous fetch POST requests containing JSON action payloads sent to the Apps Script endpoint. To prevent CORS pre-flight handshake blocking on various networks, the requests execute in <code>no-cors</code> mode with <code>text/plain</code> headers, ensuring safe writing back to the Google Spreadsheet rows.
+                </li>
+            </ol>
+        </section>
+
+        <!-- Section 3: Frontend Modules & UI -->
+        <section id="frontend" class="page-break">
+            <h1>3. Frontend Modules & User Interface</h1>
+            <p>
+                The frontend is divided into a single-page tabbed interface. Tabs are dynamically controlled using a display switcher class utility, which toggles DOM visibility via active classes, maintaining state variables in the global scope.
+            </p>
+
+            <h3>Core Frontend Views:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Module Tab</th>
+                        <th>Core Functionality</th>
+                        <th>UI Elements & Libraries Used</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>📊 Dashboard</strong></td>
+                        <td>Displays cumulative metrics (Total Orders, Total Revenue, Total Profit) and dynamic profit graphs.</td>
+                        <td>Canvas elements, line graph render powered by <code>Chart.js</code> (7-day sales trends).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🛒 Orders</strong></td>
+                        <td>Multi-item cart builder. Configures client names, phone metrics, notes, items catalog dropdown selection, quantity additions.</td>
+                        <td>Reactive subtotal/grand total computations, DOM table cart listings, PDF invoice generator.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🏷️ Products</strong></td>
+                        <td>Product listing additions with Cost Price and Sale Price mapping.</td>
+                        <td>Input form fields, product list table rendering.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📦 Stock</strong></td>
+                        <td>Adjusts inventory stock volume, alert limits, and measurement units.</td>
+                        <td>Dropdown selectors, measurement unit options (pc, kg, g, packet, box, liter, meter, bag, roll), high/low alert badges.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>👥 Customers</strong></td>
+                        <td>Unified directories displaying customer information parsed from orders data.</td>
+                        <td>Purchased items tracking list, WhatsApp message click-to-chat API redirection link.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>⚙️ Settings</strong></td>
+                        <td>System values adjustment (Shop Name, USD to PKR Exchange Rate, Google API URL).</td>
+                        <td>Config form controls, local system reset buttons (Database factory wipe).</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Invoice PDF Generation (A4 Engine):</h3>
+            <p>
+                The system bypasses typical server receipt formatting queues using client-side rendering. Clicking "Invoice" parses order objects, populates an invisible, strictly structured DOM layout container (<code>#invoice</code>), and triggers the <code>html2pdf.js</code> library:
+            </p>
+            <pre><code>const opt = {
+    margin: 0,
+    filename: `${order.id}.pdf`,
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: { scale: 4, useCORS: true, logging: false },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+};
+html2pdf().set(opt).from(element).save();</code></pre>
+        </section>
+
+        <!-- Section 4: Local Database & State Management -->
+        <section id="database">
+            <h1>4. Local Database & State Management</h1>
+            <p>
+                The application state is persisted inside a JSON object stored inside <code>localStorage</code> under the key <code>muneeb_pro_ultimate</code>. This mechanism prevents loss of business data on accidental tab closure, page refresh, or internet outages.
+            </p>
+            <h3>Local Schema Schema (muneeb_pro_ultimate):</h3>
+            <pre><code>{
+  "orders": [
+    {
+      "id": "INV-1715887201994",
+      "date": "5/17/2026",
+      "day": "Sunday",
+      "name": "Arshad Iqbal",
+      "phone": "03001234567",
+      "address": "Multan Cantt, Pakistan",
+      "product": "Logitech Mouse x1, Dell Keyboard x1",
+      "price": 1800,
+      "qty": 2,
+      "totalRevenue": 2800,
+      "totalProfit": 900,
+      "note": "Deliver after 5 PM",
+      "cartData": [
+        { "id": 1715886100112, "name": "Logitech Mouse", "price": 1200, "cost": 800, "qty": 1, "total": 1200 },
+        { "id": 1715886122459, "name": "Dell Keyboard", "price": 1600, "cost": 1100, "qty": 1, "total": 1600 }
+      ]
+    }
+  ],
+  "products": [
+    {
+      "id": 1715886100112,
+      "name": "Logitech Mouse",
+      "cost": 800,
+      "sale": 1200,
+      "qty": 45,
+      "alert": 5,
+      "unit": "pc"
+    }
+  ],
+  "customers": [
+    {
+      "name": "Arshad Iqbal",
+      "phone": "03001234567",
+      "address": "Multan Cantt, Pakistan",
+      "lastOrder": "5/17/2026"
+    }
+  ],
+  "settings": {
+    "theme": "dark",
+    "name": "Muneeb Business",
+    "rate": 278,
+    "url": "https://script.google.com/macros/s/AKfycb.../exec",
+    "sender": "Muneeb Ahmad",
+    "phone": "03070655275",
+    "address": "Al-Rehman Avenue, Al-Quresh Phase # 3, Sher Shah Road, Multan",
+    "website": "www.multantech.store"
+  }
+}</code></pre>
+            <p>
+                <strong>Memory Allocation Strategy:</strong> To optimize operations and rendering loops, the system maintains a volatile runtime array called <code>currentCart</code> to store temporary shopping selections. When <code>placeOrder()</code> executes, the items in the cart are compiled, product quantities decrement, local state is pushed to <code>localStorage</code>, and UI renders update.
+            </p>
+        </section>
+
+        <!-- Section 5: Backend Integration -->
+        <section id="backend" class="page-break">
+            <h1>5. Backend Integration: Google Sheets Engine</h1>
+            <p>
+                Google Sheets behaves as the cloud host for transactional and configuration records. Integration relies on a custom Apps Script container web application executing JavaScript in the cloud, acting as a gateway between client AJAX calls and Sheet rows.
+            </p>
+            <h3>Google Sheets Structure Mapping:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sheet Table</th>
+                        <th>Columns / Schema Configuration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Products</strong></td>
+                        <td><code>[ID, NAME, COST, SALE]</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stocks</strong></td>
+                        <td><code>[ID, NAME, QTY, ALERT, UNIT]</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Orders</strong></td>
+                        <td><code>[INV #, DATE, DAY, CUSTOMER, PHONE, ADDRESS, PRODUCT, PRICE, QTY, TOTAL, PROFIT, NOTES, CART_DATA]</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Customers</strong></td>
+                        <td><code>[Name, Phone, Address, Last Order Date]</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Google Apps Script Complete Codebase:</h3>
+            <p>
+                The following script is deployed in Google Drive as an Apps Script Web App. It handles spreadsheet access, auto-headers rendering, and JSON reads/writes:
+            </p>
+            <pre><code>function doGet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // Ensure all required sheets exist
+  const productsSheet = ss.getSheetByName("Products") || ss.insertSheet("Products");
+  const stocksSheet = ss.getSheetByName("Stocks") || ss.insertSheet("Stocks");
+  const ordersSheet = ss.getSheetByName("Orders") || ss.insertSheet("Orders");
+  const customersSheet = ss.getSheetByName("Customers") || ss.insertSheet("Customers");
+
+  // Initialize Headers if sheets are empty
+  if (productsSheet.getLastRow() === 0) {
+    productsSheet.appendRow(["ID", "NAME", "COST", "SALE"]);
+  }
+  if (stocksSheet.getLastRow() === 0) {
+    stocksSheet.appendRow(["ID", "NAME", "QTY", "ALERT", "UNIT"]);
+  }
+  if (ordersSheet.getLastRow() === 0) {
+    ordersSheet.appendRow([
+      "INV #", "DATE", "DAY", "CUSTOMER", "PHONE", "ADDRESS",
+      "PRODUCT", "PRICE", "QTY", "TOTAL", "PROFIT", "NOTES", "CART_DATA"
+    ]);
+  }
+  if (customersSheet.getLastRow() === 0) {
+    customersSheet.appendRow(["Name", "Phone", "Address", "Last Order Date"]);
+  }
+
+  const productsData = productsSheet.getDataRange().getValues();
+  const stocksData = stocksSheet.getDataRange().getValues();
+  const ordersData = ordersSheet.getDataRange().getValues();
+  const customersData = customersSheet.getDataRange().getValues();
+
+  let result = { products: [], orders: [], customers: [] };
+
+  // 1. Fetch Products + Stocks
+  for (let i = 1; i < productsData.length; i++) {
+    const p = productsData[i];
+    let stockQty = 0, stockAlert = 5, stockUnit = "pc";
+
+    for (let j = 1; j < stocksData.length; j++) {
+      if (String(stocksData[j][0]) === String(p[0])) {
+        stockQty = Number(stocksData[j][2]) || 0;
+        stockAlert = Number(stocksData[j][3]) || 5;
+        stockUnit = stocksData[j][4] || "pc";
+        break;
+      }
+    }
+    result.products.push({
+      id: p[0], name: p[1], cost: Number(p[2]) || 0, sale: Number(p[3]) || 0,
+      qty: stockQty, alert: stockAlert, unit: stockUnit
+    });
+  }
+
+  // 2. Fetch Orders
+  for (let i = 1; i < ordersData.length; i++) {
+    const o = ordersData[i];
+    let parsedCart = [];
+    try {
+      parsedCart = JSON.parse(o[12] || "[]");
+    } catch(err) {
+      parsedCart = [];
+    }
+    result.orders.push({
+      id: o[0], date: o[1], day: o[2], name: o[3], phone: String(o[4] || ""),
+      address: o[5], product: o[6], price: Number(o[7]) || 0, qty: Number(o[8]) || 0,
+      totalRevenue: Number(o[9]) || 0, totalProfit: Number(o[10]) || 0, note: o[11], cartData: parsedCart
+    });
+  }
+
+  // 3. Fetch Customers
+  for (let i = 1; i < customersData.length; i++) {
+    const c = customersData[i];
+    result.customers.push({
+      name: c[0], phone: String(c[1] || ""), address: c[2],
+      lastOrder: Utilities.formatDate(new Date(c[3]), Session.getScriptTimeZone(), "dd/MM/yyyy")
+    });
+  }
+
+  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const productsSheet = ss.getSheetByName("Products");
+  const stocksSheet = ss.getSheetByName("Stocks");
+  const ordersSheet = ss.getSheetByName("Orders");
+  const data = JSON.parse(e.postData.contents);
+
+  // ADD PRODUCT ACTION
+  if (data.action === "addProduct") {
+    productsSheet.appendRow([data.id, data.name, data.cost, data.sale]);
+    stocksSheet.appendRow([data.id, data.name, data.qty || 0, data.alert || 5, data.unit || "pc"]);
+  }
+
+  // UPDATE STOCK ACTION
+  if (data.action === "updateStock") {
+    const rows = stocksSheet.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]) === String(data.id)) {
+        stocksSheet.getRange(i + 1, 3).setValue(data.qty);
+        stocksSheet.getRange(i + 1, 4).setValue(data.alert);
+        stocksSheet.getRange(i + 1, 5).setValue(data.unit);
+        break;
+      }
+    }
+  }
+
+  // PLACE ORDER ACTION
+  if (data.action === "placeOrder") {
+    ordersSheet.appendRow([
+      data.id, data.date, data.day, data.name, data.phone, data.address,
+      data.product, data.price, data.qty, data.totalRevenue, data.totalProfit, data.note,
+      JSON.stringify(Array.isArray(data.cartData) ? data.cartData : [])
+    ]);
+  }
+
+  return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
+}</code></pre>
+        </section>
+
+        <!-- Section 6: Security -->
+        <section id="security" class="page-break">
+            <h1>6. Security: Authentication & Developer Safeguards</h1>
+            <p>
+                As a client-hosted POS, protecting proprietary script parameters, customer database tables, and inventory costing details requires proactive code protection.
+            </p>
+
+            <h3>1. Session Guard (Firebase Identity Platform)</h3>
+            <p>
+                The interface blocks page access to unauthorized visitors. Firebase Authentication regulates authorization. The client implements a state observer callback to show or hide the core workspace:
+            </p>
+            <pre><code>auth.onAuthStateChanged((user) => {
+    if (user) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+    } else {
+        document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('app').style.display = 'none';
+    }
+});</code></pre>
+
+            <h3>2. Console & Inspect Guard (protect.js)</h3>
+            <p>
+                To prevent unauthorized inspection, modification of pricing, and source code cloning, the system deploys an active listener and defense monitor in <code>protect.js</code>:
+            </p>
+            <ul>
+                <li>
+                    <strong>Context Block:</strong> Right-click menus (<code>contextmenu</code> events) are explicitly disabled across the DOM.
+                </li>
+                <li>
+                    <strong>Keyboard Shortcuts Intercept:</strong> Key listeners intercept and block shortcuts: F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U (View Source), Ctrl+S (Save Page), Ctrl+A (Select All), Ctrl+C (Copy), and Ctrl+Shift+C.
+                </li>
+                <li>
+                    <strong>Debug Timing Defense Loop:</strong> A recurrent worker executing every 1,000ms uses time-delta thresholds around a native <code>debugger;</code> call:
+                </li>
+            </ul>
+            <pre><code>setInterval(function () {
+    const before = new Date().getTime();
+    debugger; // Pauses execution if browser DevTools are open
+    const after = new Date().getTime();
+    if (after - before > 100) {
+        // If developer tools pause execution, render blackout warning
+        document.body.innerHTML = `&lt;div class="blackout-screen"&gt;Developer Tools Detected&lt;/div&gt;`;
+    }
+}, 1000);</code></pre>
+        </section>
+
+        <!-- Section 7: Setup Guide -->
+        <section id="setup">
+            <h1>7. Installation, Configurations & Troubleshooting</h1>
+            
+            <h3>Part A: Deployment of Google Sheets Middleware</h3>
+            <ol>
+                <li>Create a blank Google Sheet in your Google Drive. Name the file: <code>Muneeb POS Cloud DB</code>.</li>
+                <li>Navigate to <strong>Extensions</strong> &gt; <strong>Apps Script</strong>.</li>
+                <li>Delete any default code inside the editor. Paste the full codebase from <strong>Section 5</strong> of this manual.</li>
+                <li>Click <strong>Save Project</strong> (floppy disk icon).</li>
+                <li>Click the <strong>Deploy</strong> button in the top right and select <strong>New Deployment</strong>.</li>
+                <li>Choose type: <strong>Web App</strong>. Configure exactly as follows:
+                    <ul>
+                        <li><strong>Description:</strong> <code>POS Production Release</code></li>
+                        <li><strong>Execute as:</strong> <code>Me (your-email@gmail.com)</code></li>
+                        <li><strong>Who has access:</strong> <code>Anyone</code> (This is required to allow Webhook calls from the client).</li>
+                    </ul>
+                </li>
+                <li>Click <strong>Deploy</strong>. Authorize permission requests from the Google prompt warning.</li>
+                <li>Copy the generated <strong>Web App URL</strong> (ends in <code>/exec</code>).</li>
+            </ol>
+
+            <h3>Part B: Web App Connection and Firebase Hook</h3>
+            <ol>
+                <li>Launch the POS Pro Application in your browser or server hosting address.</li>
+                <li>Log in using your registered operator credentials.</li>
+                <li>Navigate to the <strong>Settings</strong> tab (gear icon).</li>
+                <li>Paste the copied Apps Script URL into the <strong>Google Script URL</strong> field.</li>
+                <li>Adjust your exchange rates (e.g. USD to PKR standard rates: 278), Sender Name, Phone, Address, and Website details.</li>
+                <li>Click <strong>Save Settings</strong>. Click the <strong>Sync Cloud</strong> button in the top header. The local database will automatically populate headers in the Google Sheet.</li>
+            </ol>
+
+            <h3>Troubleshooting Checklist:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Issue Identified</th>
+                        <th>Likely Root Cause</th>
+                        <th>Recommended Resolution Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Sync Failed Alert</strong></td>
+                        <td>Apps Script Web App was deployed with access set to "Only myself".</td>
+                        <td>Create a new deployment in Apps Script. Modify the access dropdown to "Anyone". Redeploy and update the URL in Settings.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cart item low stock prompt</strong></td>
+                        <td>The quantity added to the cart exceeds the value inside the Stock catalog list.</td>
+                        <td>Navigate to Stock tab. Increase the product inventory quantity using "Qty Add" form, then sync.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Blackout developer tools screen</strong></td>
+                        <td>A browser inspection panel, console window, or system debugger is active.</td>
+                        <td>Close the Chrome DevTools panels (F12 or Ctrl+Shift+I). Refresh the web browser page.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Invoices not downloading</strong></td>
+                        <td>Pop-up blocks, script loading failures, or network issues preventing <code>html2pdf.js</code> download.</td>
+                        <td>Ensure the internet connection is active to load the <code>cdnjs</code> script CDN on start. Add permission exceptions for files download in Chrome Settings.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+</body>
+</html>

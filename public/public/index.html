@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muneeb Business POS Pro</title>
+<link rel="stylesheet" href="./css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+
+<body data-theme="dark">
+
+<div id="login-screen" style="
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+padding:20px;
+">
+
+<div style="
+width:100%;
+max-width:400px;
+background:var(--card);
+padding:30px;
+border-radius:20px;
+border:1px solid var(--border);
+">
+
+<h2 style="margin-bottom:20px;text-align:center;">
+POS Login
+</h2>
+
+<input id="login-email" placeholder="Email"
+style="margin-bottom:15px;">
+
+<input id="login-password"
+type="password"
+placeholder="Password"
+style="margin-bottom:20px;">
+
+<button class="btn primary" onclick="loginUser()">
+Login
+</button>
+
+</div>
+</div>
+
+<div id="app" style="display:none;">
+
+<div id="invoice-wrapper">
+<div id="invoice">
+<div class="inv-head">
+    <div class="inv-company">
+        <h1 id="inv-shop"></h1>
+        <p><strong>Sender:</strong> <span id="inv-sender"></span></p>
+        <p><strong>Phone:</strong> <span id="inv-phone"></span></p>
+        <p><strong>Address:</strong> <span id="inv-address"></span></p>
+        <p><strong>Website:</strong> <span id="inv-website"></span></p>
+    </div>
+    <div class="inv-meta">
+        <h2>INVOICE</h2>
+        <p><strong>Invoice #:</strong> <span id="inv-id"></span></p>
+        <p><strong>Date:</strong> <span id="inv-date"></span></p>
+        <p><strong>Day:</strong> <span id="inv-day"></span></p>
+    </div>
+</div>
+<div class="inv-section">
+    <h3>Customer Details</h3>
+    <p><strong>Name:</strong> <span id="inv-customer"></span></p>
+    <p><strong>Phone:</strong> <span id="inv-cust-phone"></span></p>
+    <p><strong>Address:</strong> <span id="inv-cust-addr"></span></p>
+</div>
+<table class="invoice-table">
+<thead>
+<tr>
+<th>Product</th>
+<th>Qty</th>
+<th>Unit Price</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody id="inv-items"></tbody>
+</table>
+<div class="inv-total-box">
+    <table>
+        <tr><td><strong>Subtotal</strong></td><td id="inv-subtotal"></td></tr>
+        <tr><td><strong>Delivery</strong></td><td>0</td></tr>
+        <tr class="inv-grand"><td>TOTAL</td><td id="inv-total"></td></tr>
+    </table>
+</div>
+<div class="inv-footer">
+    Thank you for your order. Please check parcel contents before accepting delivery.
+</div>
+</div>
+</div>
+
+<header>
+<div class="theme" onclick="toggleTheme()" id="theme-btn">🌙</div>
+<div class="logo">
+<h1 id="shop-name-top">Muneeb Business</h1>
+<p id="exchange-top">1 USD = 278 PKR</p>
+</div>
+<button class="top-btn" onclick="copyScript()">📜 Copy Script</button>
+<button class="top-btn" onclick="syncEverythingFromCloud()">☁️ Sync</button>
+<button class="top-btn" onclick="logoutUser()">
+🚪 Logout
+</button>
+</header>
+
+<nav>
+<button class="nav-btn active" onclick="switchTab('dashboard',this)">📊 Dashboard</button>
+<button class="nav-btn" onclick="switchTab('orders',this)">🛒 Orders</button>
+<button class="nav-btn" onclick="switchTab('products',this)">🏷️ Products</button>
+<button class="nav-btn" onclick="switchTab('stock',this)">📦 Stock</button>
+<button class="nav-btn" onclick="switchTab('customers',this)">👥 Customers</button>
+<button class="nav-btn" onclick="switchTab('settings',this)">⚙️ Settings</button>
+</nav>
+
+<div class="wrapper">
+
+<div class="tab active" id="tab-dashboard">
+<div class="stats">
+<div class="card stat">
+<div>Total Orders</div>
+<h2 id="total-orders">0</h2>
+</div>
+<div class="card stat">
+<div>Total Revenue</div>
+<h2 id="total-revenue">0</h2>
+</div>
+<div class="card stat">
+<div>Total Profit</div>
+<h2 id="total-profit">0</h2>
+</div>
+</div>
+<div class="card">
+<div class="title">📈 Profit Analytics</div>
+<canvas id="chart" height="120"></canvas>
+</div>
+</div>
+
+<div class="tab" id="tab-orders">
+<div class="card">
+<div class="title">🛒 Create Order</div>
+<div class="grid">
+<div class="full">
+<label>Customer Name</label>
+<input id="o-name">
+</div>
+<div>
+<label>Phone</label>
+<input id="o-phone">
+</div>
+<div class="full">
+<label>Address</label>
+<input id="o-address">
+</div>
+
+<div class="full" style="border-top:1px solid var(--border); padding-top:15px; margin-top:5px;">
+<label>Add Products to Order</label>
+<div style="display:flex; gap:10px;">
+<select id="o-product" style="flex:1;"></select>
+<input type="number" id="o-qty" value="1" style="width:80px;">
+<button class="btn primary" onclick="addToCart()" style="width:auto; padding:0 20px;">Add</button>
+</div>
+</div>
+
+<div class="full" id="cart-items" style="display:flex; flex-direction:column; gap:8px;">
+</div>
+
+<div class="full" style="text-align:right; font-size:18px; font-weight:bold; color:var(--text);">
+Grand Total: <span id="o-grand-total">Rs. 0</span>
+</div>
+
+<div class="full">
+<label>Note</label>
+<textarea id="o-note"></textarea>
+</div>
+<div class="full">
+<button class="btn primary" onclick="placeOrder()">Create Order</button>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="title">📜 Orders</div>
+<div class="list" id="orders-list"></div>
+</div>
+</div>
+
+<div class="tab" id="tab-products">
+<div class="card">
+<div class="title">🏷️ Add Product</div>
+<div class="grid">
+<div class="full">
+<label>Product Name</label>
+<input id="p-name">
+</div>
+<div>
+<label>Cost Price</label>
+<input type="number" id="p-cost">
+</div>
+<div>
+<label>Sale Price</label>
+<input type="number" id="p-sale">
+</div>
+<div class="full">
+<button class="btn primary" onclick="addProduct()">Add Product</button>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="title">📚 Products</div>
+<div class="list" id="products-list"></div>
+</div>
+</div>
+
+<div class="tab" id="tab-stock">
+<div class="card">
+<div class="title">📦 Manage Stock</div>
+<div class="grid">
+<div class="full">
+<label>Select Product</label>
+<select id="s-product"></select>
+</div>
+<div>
+<label>Qty Add</label>
+<input type="number" id="s-qty">
+</div>
+<div>
+<label>Alert Level</label>
+<input type="number" id="s-alert" value="5">
+</div>
+<div class="full">
+<label>Unit</label>
+<select id="s-unit">
+<option value="pc">Piece</option>
+<option value="kg">Kg</option>
+<option value="g">Gram</option>
+<option value="packet">Packet</option>
+<option value="box">Box</option>
+<option value="liter">Liter</option>
+<option value="meter">Meter</option>
+<option value="feet">Feet</option>
+<option value="inch">Inch</option>
+<option value="dozen">Dozen</option>
+<option value="bag">Bag</option>
+<option value="roll">Roll</option>
+</select>
+</div>
+<div class="full">
+<button class="btn primary" onclick="updateStock()">Update Stock</button>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="title">📊 Stock</div>
+<div class="list" id="stock-list"></div>
+</div>
+</div>
+
+<div class="tab" id="tab-customers">
+<div class="card">
+<div class="title">👥 Customer Directory</div>
+<div class="list" id="customers-list"></div>
+</div>
+</div>
+
+<div class="tab" id="tab-settings">
+<div class="card">
+<div class="title">⚙️ Settings</div>
+<div class="grid">
+<div class="full">
+<label>Business Name</label>
+<input id="set-name">
+</div>
+<div>
+<label>Exchange Rate</label>
+<input type="number" id="set-rate">
+</div>
+<div class="full">
+<label>Google Script URL</label>
+<input id="set-url">
+</div>
+<div>
+<label>Sender Name</label>
+<input id="set-sender">
+</div>
+<div>
+<label>Sender Phone</label>
+<input id="set-phone">
+</div>
+<div class="full">
+<label>Sender Address</label>
+<input id="set-address">
+</div>
+<div class="full">
+<label>Website</label>
+<input id="set-website">
+</div>
+<div class="full">
+<button class="btn primary" onclick="saveSettings()">Save Settings</button>
+</div>
+<div class="full">
+<button class="btn danger" onclick="wipeData()">Factory Reset</button>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="./js/firebase.js"></script>
+<script src="./js/invoice.js"></script>
+<script src="./js/app.js"></script>
+<script src="./js/protect.js"></script>
+
+</body>
+</html>
